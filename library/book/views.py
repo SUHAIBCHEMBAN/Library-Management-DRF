@@ -1,7 +1,7 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView 
-from rest_framework.pagination import PageNumberPagination  
-from rest_framework.permissions import IsAuthenticated
-from account.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated  
+from account.permissions import IsAuthenticatedCustom
 from .bookSerializer import BookSerializer,AuthorSerializer
 from django.views import View
 from django.http import HttpResponse
@@ -71,9 +71,6 @@ class BookListCreateAPIView(ListCreateAPIView):
     pagination_class = ResultsSetPagination
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
 
 class BookRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
@@ -96,7 +93,7 @@ class AuthorListCreateAPIView(ListCreateAPIView):
     """
     serializer_class = AuthorSerializer
     queryset = Author.objects.prefetch_related('book_set').all()
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
@@ -109,5 +106,6 @@ class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
     serializer_class = AuthorSerializer
     queryset = Author.objects.prefetch_related('book_set').all()
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
 

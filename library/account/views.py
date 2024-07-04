@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
-from .serializers import UserSerializer
+from .userserializers import UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
@@ -9,8 +9,7 @@ from django.contrib.auth.models import User
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (AllowAny,)
-
+    permission_classes = [AllowAny]
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

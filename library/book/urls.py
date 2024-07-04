@@ -13,10 +13,10 @@ urlpatterns = [
     path('books/<int:pk>/',views.BookRetriveUpdateDeleteAPIView.as_view(),name='books-delete-update-retrive'),
 
     # List and Create the Author
-    path('author/',views.AuthorListCreateAPIView.as_view(),name='author-create-list'),
+    path('authors/',views.AuthorListCreateAPIView.as_view(),name='author-create-list'),
 
     # Retrive,Update and Delete the Author
-    path('author/<int:pk>/',views.AuthorRetriveUpdateDeleteAPIView.as_view(),name='author-delete-update-retrive'),
+    path('authors/<int:pk>/',views.AuthorRetriveUpdateDeleteAPIView.as_view(),name='author-delete-update-retrive'),
 
 ]
 
