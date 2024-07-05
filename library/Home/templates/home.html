@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Home</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #000428, #004e92);
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3em;
+            position: relative;
+            animation: slide-in 1s ease-out forwards;
+            transition: transform 0.5s ease-out;
+            z-index: 1;
+        }
+
+        h1:hover {
+            transform: translateX(20px);
+        }
+
+        @keyframes slide-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 1.5s infinite;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(0.5) translateY(0) translateX(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5) translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>API Is Running!!!</h1>
+    <div class="sparkle" style="animation-delay: 0s;"></div>
+    <div class="sparkle" style="animation-delay: 0.3s;"></div>
+    <div class="sparkle" style="animation-delay: 0.6s;"></div>
+    <div class="sparkle" style="animation-delay: 0.9s;"></div>
+    <div class="sparkle" style="animation-delay: 1.2s;"></div>
+
+    <!-- Stars in the background -->
+    <div class="star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="star" style="top: 20%; left: 30%; animation-delay: 0.5s;"></div>
+    <div class="star" style="top: 30%; left: 40%; animation-delay: 1s;"></div>
+    <div class="star" style="top: 40%; left: 50%; animation-delay: 1.5s;"></div>
+    <div class="star" style="top: 50%; left: 60%; animation-delay: 2s;"></div>
+    <div class="star" style="top: 60%; left: 70%; animation-delay: 2.5s;"></div>
+    <div class="star" style="top: 70%; left: 80%; animation-delay: 3s;"></div>
+    <div class="star" style="top: 80%; left: 90%; animation-delay: 3.5s;"></div>
+</body>
+</html>

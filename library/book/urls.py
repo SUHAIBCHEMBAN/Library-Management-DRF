@@ -3,9 +3,6 @@ from . import views
 
 urlpatterns = [
 
-    # Show the Running Message
-    path('',views.Home.as_view(),name='Home'),   
-
     # List and Create the books
     path('books/',views.BookListCreateAPIView.as_view(),name='books-create-list'),
 
