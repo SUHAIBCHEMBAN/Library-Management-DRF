@@ -9,13 +9,9 @@ class AdminAuthor(admin.ModelAdmin):
 
     This class customizes the display and filter options for the Author model
     in the Django admin interface.
-
-    Attributes:
-        list_display (list): Specifies the fields to display in the list view.
-        list_filter (list): Specifies the fields to filter by in the list view.
     """
-    list_display = ['id','name']
-    list_filter = ['id']
+    list_display = ['id','name','added_by']
+    list_filter = ['id','added_by']
 
 class AdminBook(admin.ModelAdmin):
     """
@@ -23,13 +19,9 @@ class AdminBook(admin.ModelAdmin):
 
     This class customizes the display and filter options for the Book model
     in the Django admin interface.
-
-    Attributes:
-        list_display (list): Specifies the fields to display in the list view.
-        list_filter (list): Specifies the fields to filter by in the list view.
     """
-    list_display = ['id','Title','Author','Published_date']
-    list_filter = ['id','Published_date']
+    list_display = ['id','Title','Author','Published_date','added_by']
+    list_filter = ['id','Published_date','added_by']
 
 
 # Register the models with the admin site using the custom admin classes

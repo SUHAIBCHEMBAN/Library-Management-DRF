@@ -1,8 +1,9 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView 
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated  
 from .bookSerializer import BookSerializer,AuthorSerializer
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from .models import Book,Author
+from .permissions import Owner
 
 # Create your views here.
 
@@ -30,6 +31,10 @@ class BookListCreateAPIView(ListCreateAPIView):
     pagination_class = ResultsSetPagination
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(added_by=self.request.user)
+
+#TODO:ADD CACHE WITH SIGNELS NEW BOOK ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
 class BookRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
@@ -41,7 +46,10 @@ class BookRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
      
     serializer_class = BookSerializer
     queryset = Book.objects.select_related('Author').all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,Owner]
+
+
+#TODO:ADD CACHE WITH SIGNELS NEW BOOK REMOVE TIME SIGNEL WORK AND CLEAN THE CACHE , SET THE PERMISSION
 
 
 class AuthorListCreateAPIView(ListCreateAPIView):
@@ -56,6 +64,10 @@ class AuthorListCreateAPIView(ListCreateAPIView):
     queryset = Author.objects.prefetch_related('book_set').all()
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(added_by=self.request.user)
+
+#TODO:ADD CACHE WITH SIGNELS NEW AUTHOR ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
 class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
@@ -68,6 +80,10 @@ class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     
     serializer_class = AuthorSerializer
     queryset = Author.objects.prefetch_related('book_set').all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,Owner]
+
+    
+
+#TODO:ADD CACHE WITH SIGNELS NEW AUTHOR REMOVE OR UPDATE TIME SIGNEL WORK AND CLEAN THE CACHE ,SET THE PERMISSION , LEARN ABOUT MODEL MANAGE USING DJANGO 
 
 
