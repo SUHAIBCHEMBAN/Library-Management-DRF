@@ -42,8 +42,7 @@ class BookListCreateAPIView(ListCreateAPIView):
     
     def perform_create(self, serializer):
         serializer.save(added_by=self.request.user)
-        cache.delete('books_cache')
-        print('Book Cache cleared (booklist)')
+
 
 #TODO:ADD CACHE WITH SIGNELS NEW BOOK ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
@@ -67,11 +66,6 @@ class BookRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
         else:
             print('DATA Fetched from book CACHE (bookupdate)')
         return books
-    
-    def perform_create(self, serializer):
-        serializer.save()
-        cache.delete('books_cache')
-        print('Book Cache cleared (bookupdate)')
 
 
 #TODO:ADD CACHE WITH SIGNELS NEW BOOK REMOVE TIME SIGNEL WORK AND CLEAN THE CACHE , SET THE PERMISSION
@@ -100,8 +94,7 @@ class AuthorListCreateAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(added_by=self.request.user)
-        cache.delete('authors_cache')
-        print('Author Cache Cleared (authorlist)')
+
 
 #TODO:ADD CACHE WITH SIGNELS NEW AUTHOR ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
@@ -117,19 +110,14 @@ class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated,Owner]
 
     def get_queryset(self):
-        authors = cache.get('auhtors_cache')
+        authors = cache.get('authors_cache')
         if not authors:
             print("DATA Fetched from DB (author)")
             authors = Author.objects.prefetch_related('book_set').all()
-            cache.set('auhtors_cache',authors,timeout= 24 * 3600)
+            cache.set('authors_cache',authors,timeout= 24 * 3600)
         else:
             print('DATA Fetched from CACHE (authorupdate)')
         return authors
-    
-    def perform_create(self, serializer):
-        serializer.save()
-        cache.delete('authors_cache')
-        print('Author Cache Cleared (authorupdate)')
 
     
 #TODO:ADD CACHE WITH SIGNELS NEW AUTHOR REMOVE OR UPDATE TIME SIGNEL WORK AND CLEAN THE CACHE ,SET THE PERMISSION , LEARN ABOUT MODEL MANAGE USING DJANGO 
