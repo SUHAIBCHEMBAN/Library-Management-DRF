@@ -2,6 +2,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from .bookSerializer import BookSerializer,AuthorSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from django.core.cache import cache
 from .models import Book,Author
 from .permissions import Owner
 
@@ -14,7 +15,6 @@ class ResultsSetPagination(PageNumberPagination):
     This pagination class extends DRF's PageNumberPagination and adds
     support for customizing the page size via query parameters.
     """
-       
     page_size_query_param = 'page_size'
     
 
@@ -27,12 +27,23 @@ class BookListCreateAPIView(ListCreateAPIView):
     """
 
     serializer_class = BookSerializer
-    queryset = Book.objects.select_related('Author').all()
     pagination_class = ResultsSetPagination
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        books = cache.get('books_cache')
+        if not books:
+            print("DATA Fetched from DB (book)")
+            books = Book.objects.select_related('Author').all()
+            cache.set('books_cache',books,timeout= 24 * 3600)
+        else:
+            print('DATA Fetched from CACHE (booklist)')
+        return books
+    
     def perform_create(self, serializer):
         serializer.save(added_by=self.request.user)
+        cache.delete('books_cache')
+        print('Book Cache cleared (booklist)')
 
 #TODO:ADD CACHE WITH SIGNELS NEW BOOK ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
@@ -45,8 +56,22 @@ class BookRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     """
      
     serializer_class = BookSerializer
-    queryset = Book.objects.select_related('Author').all()
     permission_classes = [IsAuthenticated,Owner]
+
+    def get_queryset(self):
+        books = cache.get('books_cache')
+        if not books:
+            print("DATA Fetched from DB (book)")
+            books = Book.objects.select_related('Author').all()
+            cache.set('books_cache',books,timeout= 24 * 3600)
+        else:
+            print('DATA Fetched from book CACHE (bookupdate)')
+        return books
+    
+    def perform_create(self, serializer):
+        serializer.save()
+        cache.delete('books_cache')
+        print('Book Cache cleared (bookupdate)')
 
 
 #TODO:ADD CACHE WITH SIGNELS NEW BOOK REMOVE TIME SIGNEL WORK AND CLEAN THE CACHE , SET THE PERMISSION
@@ -61,11 +86,22 @@ class AuthorListCreateAPIView(ListCreateAPIView):
     """
 
     serializer_class = AuthorSerializer
-    queryset = Author.objects.prefetch_related('book_set').all()
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        authors = cache.get('authors_cache')
+        if not authors:
+            print("DATA Fetched from DB (author)")
+            authors = Author.objects.prefetch_related('book_set').all()
+            cache.set('authors_cache',authors,timeout= 24 * 3600)
+        else:
+            print('DATA Fetched from Author CACHE (authorlist)')
+        return authors
 
     def perform_create(self, serializer):
         serializer.save(added_by=self.request.user)
+        cache.delete('authors_cache')
+        print('Author Cache Cleared (authorlist)')
 
 #TODO:ADD CACHE WITH SIGNELS NEW AUTHOR ADD TIME SIGNEL WORK AND CLEAN THE CACHE 
 
@@ -77,13 +113,25 @@ class AuthorRetriveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     updating, and deleting a specific author identified by its ID.
     The related books are prefetched to optimize query performance.
     """
-    
     serializer_class = AuthorSerializer
-    queryset = Author.objects.prefetch_related('book_set').all()
     permission_classes = [IsAuthenticated,Owner]
 
+    def get_queryset(self):
+        authors = cache.get('auhtors_cache')
+        if not authors:
+            print("DATA Fetched from DB (author)")
+            authors = Author.objects.prefetch_related('book_set').all()
+            cache.set('auhtors_cache',authors,timeout= 24 * 3600)
+        else:
+            print('DATA Fetched from CACHE (authorupdate)')
+        return authors
     
+    def perform_create(self, serializer):
+        serializer.save()
+        cache.delete('authors_cache')
+        print('Author Cache Cleared (authorupdate)')
 
+    
 #TODO:ADD CACHE WITH SIGNELS NEW AUTHOR REMOVE OR UPDATE TIME SIGNEL WORK AND CLEAN THE CACHE ,SET THE PERMISSION , LEARN ABOUT MODEL MANAGE USING DJANGO 
 
 
